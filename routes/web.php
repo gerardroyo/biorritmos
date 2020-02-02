@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('BIO/form');
-});
+Route::get('/', 'bioController@index');
+Route::get('store', 'bioController@store');
