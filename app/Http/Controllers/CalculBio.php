@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Exception;
+user 
 
-class linkController extends Controller
+class CalculBio extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,16 +36,51 @@ class linkController extends Controller
      */
     public function store(Request $request)
     {
-        $web = new Webs();
-        $web->setId($request->input('webId'));
-        $web->setUrl($request->input('webUrl'));
-        $web->setName($request->input('webName'));
-        $web->setDescription($request->input('webDescription'));
+        $fis = 23;
+        $emo = 28;
+        $intel = 33;
 
-        $usuari = $request->session()->get('usuari');
-        $usuari->addWeb($web);
+        $name = $request->input('name');
+        $date = $request->input('fecha');
 
-        return view('weblist', ['nomUsuari'=> $usuari->getName(), 'webList'=>$usuari->getWeb()]);
+        $difDias = $this->DifDate($date);
+
+        $diasFis = $this->CalcularDias($date, $difDias, $fis);
+        $diasEmo = $this->CalcularDias($date, $difDias, $emo);
+        $diasIntel = $this->CalcularDias($date, $difDias, $intel);
+
+        $FisBarra = ($diasFis + 1) * 100 / 2;
+        $EmoBarra = ($diasEmo + 1) * 100 / 2;
+        $IntelBarra = ($diasIntel + 1) * 100 / 2;
+
+        $date = date("d/m/Y", strtotime($request->input('fecha')));
+
+      return view ('BIO/result', ['name' => $name,
+            'nacimiento' => $date,
+            'fisBarra' => $FisBarra,
+            'emoBarra' => $EmoBarra,
+            'intelBarra' => $IntelBarra]);
+    }
+
+    public function DifDate($date) {
+
+        $today = $this->DateToday();
+
+        $diff = $date->diff($today);
+        return $diff;
+    }
+
+    public function DateToday() {
+        $today = time();
+        return $today;
+    }
+
+    public function CalcularDias($date, $difDias, $diasFis) {
+        
+        $timesBucle = sin($difDias / $diasFis);
+        $rad = sin($timesBucle * 2 * pi());
+
+        return $rad;
     }
 
     /**

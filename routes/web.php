@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('/', 'bioController@index');
-Route::get('store', 'bioController@store');
+Route::get('/', 'CalculBio@index');
+Route::get('store', 'CalculBio@store');
