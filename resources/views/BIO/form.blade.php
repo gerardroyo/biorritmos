@@ -18,12 +18,12 @@ una fase positiva, durante la cual las energías y las capacidades son altas
 <form action="store" method="get">
   <div class="form-group">
     <label for="exampleInputEmail1">Tu nombre</label>
-    <input type="text" class="form-control" id="name" placeholder="Nombre">
+    <input type="text" class="form-control" name="name" placeholder="Nombre">
     <small id="emailHelp" class="form-text text-muted">No guardaremos tu información en nuestra base de datos.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Fecha de nacimiento</label>
-    <input type="text" class="form-control" id="fecha" placeholder="dd/mm/aaaa">
+    <input type="date" class="form-control" name="fecha" placeholder="dd/mm/aaaa">
   </div>
   <button type="submit" class="btn btn-primary">Calcular</button>
 </form>

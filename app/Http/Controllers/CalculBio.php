@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Exception;
-user 
 
 class CalculBio extends Controller
 {
@@ -36,51 +35,46 @@ class CalculBio extends Controller
      */
     public function store(Request $request)
     {
-        $fis = 23;
-        $emo = 28;
-        $intel = 33;
+        if (empty($request->input('fecha')) || empty($request->input('name'))) {
+            return view('errors.404');
+        } else {
+            $DiffDate = $this->DiffDate(time(), strtotime($request->input('fecha')));
+            $fisico = $this->Calc($DiffDate, 23);
+            $emocional = $this->Calc($DiffDate, 28);
+            $intelectual = $this->Calc($DiffDate, 33);
 
-        $name = $request->input('name');
-        $date = $request->input('fecha');
+            $FisiBarra = round($fisico, 0);
+            $EmoBarra = round($emocional, 0);
+            $IntelBarra = round($intelectual, 0);
 
-        $difDias = $this->DifDate($date);
+            $date = date("d/m/Y", strtotime($request->input('fecha')));
 
-        $diasFis = $this->CalcularDias($date, $difDias, $fis);
-        $diasEmo = $this->CalcularDias($date, $difDias, $emo);
-        $diasIntel = $this->CalcularDias($date, $difDias, $intel);
-
-        $FisBarra = ($diasFis + 1) * 100 / 2;
-        $EmoBarra = ($diasEmo + 1) * 100 / 2;
-        $IntelBarra = ($diasIntel + 1) * 100 / 2;
-
-        $date = date("d/m/Y", strtotime($request->input('fecha')));
-
-      return view ('BIO/result', ['name' => $name,
-            'nacimiento' => $date,
-            'fisBarra' => $FisBarra,
-            'emoBarra' => $EmoBarra,
-            'intelBarra' => $IntelBarra]);
+            return view('BIO/result', [
+                'nombre' => $request->input('name'), 'date' => $date, 'fisico' => $fisico, 'FisiBarra' => $FisiBarra, 'emocional' => $emocional, 'EmoBarra' => $EmoBarra, 'intelectual' => $intelectual, 'IntelBarra' => $IntelBarra]);
+        }
     }
 
-    public function DifDate($date) {
-
-        $today = $this->DateToday();
-
-        $diff = $date->diff($today);
-        return $diff;
+    public function DiffDate($today, $date)
+    {
+        try {
+            return round(($today - $date) / (60 * 60 * 24)); // Diferència de dies
+        } catch (Exception $e) {
+            return view('errors.404');
+        }
     }
 
-    public function DateToday() {
-        $today = time();
-        return $today;
-    }
+    public function Calc($diff, $day)
+    {
+        try {
 
-    public function CalcularDias($date, $difDias, $diasFis) {
-        
-        $timesBucle = sin($difDias / $diasFis);
-        $rad = sin($timesBucle * 2 * pi());
+            $totally = $diff / $day;
+            $totRad = sin($totally * 2 * pi());
+            $tot = ($totRad + 1) * 100 / 2;
 
-        return $rad;
+            return $tot;
+        } catch (Exception $e) {
+            return view('errors.404');
+        }
     }
 
     /**
@@ -128,3 +122,4 @@ class CalculBio extends Controller
         //
     }
 }
+
